@@ -47,122 +47,126 @@
   /* Base Variables */
   --radius: 0.625rem;
 
-  /* New Color Palette */
-  --dark-blue: #21295c;
-  --medium-blue: #1b3b6f;
-  --teal-blue: #065a82;
-  --light-blue: #1c7293;
-  --pale-blue: #9eb3c2;
+  /* New Color Palette - Dark Metal Theme */
+  --metal-dark: #000000;
+  --metal-darker: #121212;
+  --metal-gray: #1a1a1a;
+  --metal-light: #2a2a2a;
+  --metallic-blue: #22859c;
+  --metallic-steel: #3a3a3a;
+  --neon-blue: #00f7ff;
+  --neon-cyan: #00ffff;
+  --neon-white: #ffffff;
 
   /* Background */
-  --background: var(--dark-blue);
-  --foreground: #f2f2f2;
+  --background: var(--metal-dark);
+  --foreground: var(--neon-white);
 
   /* Card and popover elements */
-  --card: #21295c;
-  --card-foreground: #f2f2f2;
-  --popover: #21295c;
-  --popover-foreground: #f2f2f2;
+  --card: rgba(26, 26, 26, 0.9);
+  --card-foreground: var(--neon-white);
+  --popover: rgba(26, 26, 26, 0.95);
+  --popover-foreground: var(--neon-white);
 
-  /* Primary - Main blue */
-  --primary: var(--light-blue);
-  --primary-foreground: #ffffff;
+  /* Primary - Metallic blue */
+  --primary: var(--metallic-blue);
+  --primary-foreground: var(--neon-white);
 
-  /* Secondary - Darker blue */
-  --secondary: var(--teal-blue);
-  --secondary-foreground: #ffffff;
+  /* Secondary - Steel */
+  --secondary: var(--metallic-steel);
+  --secondary-foreground: var(--neon-white);
 
-  /* Accent - Light blue with glow */
-  --accent: var(--pale-blue);
-  --accent-foreground: var(--dark-blue);
+  /* Accent - Neon blue */
+  --accent: var(--neon-blue);
+  --accent-foreground: var(--metal-dark);
 
   /* Muted elements */
-  --muted: #1b3b6f;
-  --muted-foreground: #9eb3c2;
+  --muted: var(--metal-gray);
+  --muted-foreground: rgba(255, 255, 255, 0.6);
 
   /* System colors */
-  --destructive: #ef4444;
-  --border: rgba(156, 179, 194, 0.2);
-  --input: rgba(156, 179, 194, 0.2);
-  --ring: var(--teal-blue);
+  --destructive: #ff2d2d;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.1);
+  --ring: var(--neon-cyan);
 
   /* Chart colors */
-  --chart-1: var(--light-blue);
-  --chart-2: var(--teal-blue);
-  --chart-3: var(--medium-blue);
-  --chart-4: var(--pale-blue);
-  --chart-5: var(--dark-blue);
+  --chart-1: var(--neon-blue);
+  --chart-2: var(--metallic-blue);
+  --chart-3: var(--metallic-steel);
+  --chart-4: var(--metal-light);
+  --chart-5: var(--metal-gray);
 
   /* Sidebar colors */
-  --sidebar: var(--dark-blue);
-  --sidebar-foreground: #f2f2f2;
-  --sidebar-primary: var(--light-blue);
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: var(--teal-blue);
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: rgba(156, 179, 194, 0.2);
-  --sidebar-ring: var(--teal-blue);
+  --sidebar: var(--metal-darker);
+  --sidebar-foreground: var(--neon-white);
+  --sidebar-primary: var(--metallic-blue);
+  --sidebar-primary-foreground: var(--neon-white);
+  --sidebar-accent: var(--neon-cyan);
+  --sidebar-accent-foreground: var(--metal-dark);
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: var(--neon-cyan);
 
   /* Custom UI Variables */
-  --cyber-grid-color: rgba(156, 179, 194, 0.05);
-  --cyber-glow-primary: rgba(28, 114, 147, 0.2);
-  --cyber-glow-strong: rgba(28, 114, 147, 0.5);
-  --cyber-line-color: rgba(156, 179, 194, 0.3);
-  --cyber-terminal-bg: rgba(33, 41, 92, 0.8);
-  --cyber-text-bright: #ffffff;
-  --cyber-text-muted: rgba(242, 242, 242, 0.7);
-  --cyber-text-dim: rgba(242, 242, 242, 0.5);
+  --cyber-grid-color: rgba(255, 255, 255, 0.03);
+  --cyber-glow-primary: rgba(0, 247, 255, 0.15);
+  --cyber-glow-strong: rgba(0, 247, 255, 0.3);
+  --cyber-line-color: rgba(255, 255, 255, 0.1);
+  --cyber-terminal-bg: rgba(26, 26, 26, 0.9);
+  --cyber-text-bright: var(--neon-white);
+  --cyber-text-muted: rgba(255, 255, 255, 0.6);
+  --cyber-text-dim: rgba(255, 255, 255, 0.4);
 }
 
 .dark {
   /* Background */
-  --background: var(--dark-blue);
-  --foreground: #f2f2f2;
+  --background: var(--metal-dark);
+  --foreground: var(--neon-white);
 
   /* Card and popover elements */
-  --card: #21295c;
-  --card-foreground: #f2f2f2;
-  --popover: #21295c;
-  --popover-foreground: #f2f2f2;
+  --card: rgba(26, 26, 26, 0.9);
+  --card-foreground: var(--neon-white);
+  --popover: rgba(26, 26, 26, 0.95);
+  --popover-foreground: var(--neon-white);
 
-  /* Primary - Main blue */
-  --primary: var(--light-blue);
-  --primary-foreground: #ffffff;
+  /* Primary - Metallic blue */
+  --primary: var(--metallic-blue);
+  --primary-foreground: var(--neon-white);
 
-  /* Secondary - Darker blue */
-  --secondary: var(--teal-blue);
-  --secondary-foreground: #ffffff;
+  /* Secondary - Steel */
+  --secondary: var(--metallic-steel);
+  --secondary-foreground: var(--neon-white);
 
-  /* Accent - Light blue with glow */
-  --accent: var(--pale-blue);
-  --accent-foreground: var(--dark-blue);
+  /* Accent - Neon blue */
+  --accent: var(--neon-blue);
+  --accent-foreground: var(--metal-dark);
 
   /* Muted elements */
-  --muted: #1b3b6f;
-  --muted-foreground: #9eb3c2;
+  --muted: var(--metal-gray);
+  --muted-foreground: rgba(255, 255, 255, 0.6);
 
   /* System colors */
-  --destructive: #ef4444;
-  --border: rgba(156, 179, 194, 0.2);
-  --input: rgba(156, 179, 194, 0.2);
-  --ring: var(--teal-blue);
+  --destructive: #ff2d2d;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.1);
+  --ring: var(--neon-cyan);
 
   /* Chart colors */
-  --chart-1: var(--light-blue);
-  --chart-2: var(--teal-blue);
-  --chart-3: var(--medium-blue);
-  --chart-4: var(--pale-blue);
-  --chart-5: var(--dark-blue);
+  --chart-1: var(--neon-blue);
+  --chart-2: var(--metallic-blue);
+  --chart-3: var(--metallic-steel);
+  --chart-4: var(--metal-light);
+  --chart-5: var(--metal-gray);
 
   /* Sidebar colors */
-  --sidebar: var(--dark-blue);
-  --sidebar-foreground: #f2f2f2;
-  --sidebar-primary: var(--light-blue);
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: var(--teal-blue);
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: rgba(156, 179, 194, 0.2);
-  --sidebar-ring: var(--teal-blue);
+  --sidebar: var(--metal-darker);
+  --sidebar-foreground: var(--neon-white);
+  --sidebar-primary: var(--metallic-blue);
+  --sidebar-primary-foreground: var(--neon-white);
+  --sidebar-accent: var(--neon-cyan);
+  --sidebar-accent-foreground: var(--metal-dark);
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: var(--neon-cyan);
 }
 
 @layer base {

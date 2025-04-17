@@ -20,21 +20,21 @@ export const syncUser = mutation({
   },
 });
 
-// export const updateUser = mutation({
-//   args: {
-//     name: v.string(),
-//     email: v.string(),
-//     clerkId: v.string(),
-//     image: v.optional(v.string()),
-//   },
-//   handler: async (ctx, args) => {
-//     const existingUser = await ctx.db
-//       .query("users")
-//       .withIndex("byClerkId", (q) => q.eq("clerkId", args.clerkId))
-//       .first();
+export const updateUser = mutation({
+  args: {
+    name: v.string(),
+    email: v.string(),
+    clerkId: v.string(),
+    image: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const existingUser = await ctx.db
+      .query("users")
+      .withIndex("byClerkId", (q) => q.eq("clerkId", args.clerkId))
+      .first();
 
-//     if (!existingUser) return;
+    if (!existingUser) return;
 
-//     return await ctx.db.patch(existingUser._id, args);
-//   },
-// });
+    return await ctx.db.patch(existingUser._id, args);
+  },
+});
