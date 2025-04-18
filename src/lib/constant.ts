@@ -18,10 +18,10 @@ export const USER_ROADMAPS = [
     isActive: true,
   },
   {
-    userId: "user_2",
-    name: "Michael",
+    userId: "Rahul",
+    name: "Rahul",
     roadmapPlan: {
-      goal: "Build portfolio projects to land a full-stack developer role.",
+      goal: "Build portfolio projects to land a full-stack role.",
       skill: "intermediate",
       schedule: "5-10h",
       interest: ["Full Stack Development", "Backend APIs", "Cloud Deployment"],
@@ -36,10 +36,10 @@ export const USER_ROADMAPS = [
     isActive: true,
   },
   {
-    userId: "user_3",
-    name: "Elena",
+    userId: "Ankita",
+    name: "Ankita",
     roadmapPlan: {
-      goal: "Stay up to date and sharpen dev skills while working full-time.",
+      goal: "Stay up to date and sharpen dev skills while working.",
       skill: "intermediate",
       schedule: "<2h",
       interest: ["AI & Machine Learning", "Data Science"],

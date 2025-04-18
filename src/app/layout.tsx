@@ -31,12 +31,12 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <div className="fixed inset-0 -z-1">
+          <div className="fixed inset-0 z-10">
             <Aurora />
           </div>
 
           {/* Main Content */}
-          <div className="relative min-h-screen flex flex-col">
+          <div className="relative min-h-screen flex flex-col z-20">
             <div className="fixed top-0 left-0 right-0 z-50">
               <Navbar />
             </div>
