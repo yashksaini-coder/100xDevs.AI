@@ -17,19 +17,16 @@ import {
   Target,
   Users2
 } from "lucide-react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+
+
 import { NoRoadmap } from "@/components/NoRoadmap";
+import { Id } from "../../../convex/_generated/dataModel";
 
 export default function ProfilePage() {
   const { user } = useUser();
-  const userId = user?.id as string;
+  const userId = user?.id;
 
-  const allRoadmaps = useQuery(api.roadmaps.getUserRoadmaps, { userId });
+  const allRoadmaps = useQuery(api.roadmaps.getUserRoadmaps, { userId: userId as Id<"users"> });
   const [selectedRoadmapId, setSelectedRoadmapId] = useState<null | string>(null);
 
   const activeRoadmap = allRoadmaps?.find((roadmap) => roadmap.isActive);
@@ -63,7 +60,7 @@ export default function ProfilePage() {
                   key={roadmap._id}
                   onClick={() => setSelectedRoadmapId(roadmap._id)}
                   className={`text-foreground border hover:text-white ${
-                    selectedRoadmapId === roadmap._id
+                    selectedRoadmapId == roadmap._id
                       ? "bg-primary/20 text-primary border-primary"
                       : "bg-transparent border-border hover:border-primary/50"
                   }`}
