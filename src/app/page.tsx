@@ -18,11 +18,11 @@ const HomePage = () => {
             {/* LEFT SIDE CONTENT */}
             <div className="lg:col-span-7 space-y-8 relative z-10">
               {/* Gradient Text Effect */}
-              <h1 className="font-bold tracking-tight bg-gradient-to-br from-foreground via-foreground/80 to-foreground/40 bg-clip-text text-transparent">
+              <h1 className="font-bold tracking-tight bg-gradient-to-br from-foreground via-foreground/80 to-foreground/40 bg-clip-text text-transparent animate-text-fade">
                 <div className="text-3xl md:text-4xl lg:text-5xl">
                   Learn to Code
                 </div>
-                <div className="text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-primary via-primary/80 to-secondary bg-clip-text text-transparent">
+                <div className="text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-primary via-primary/80 to-secondary bg-clip-text text-transparent animate-text-fade">
                   <ContainerTextFlipDemo />
                 </div>
               </h1>
@@ -39,11 +39,11 @@ const HomePage = () => {
               <div className="flex items-center gap-10 py-6 font-mono">
                 <div className="flex flex-col">
                   <div className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">500+</div>
-                  <div className="text-xs uppercase tracking-wider text-muted-foreground">xDevs</div>
+                  <div className="text-xs uppercase tracking-wider text-muted-foreground">Devs</div>
                 </div>
                 <div className="h-12 w-px bg-gradient-to-b from-transparent via-primary/20 to-transparent"></div>
                 <div className="flex flex-col">
-                  <div className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">5 min</div>
+                  <div className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"> 10 min</div>
                   <div className="text-xs uppercase tracking-wider text-muted-foreground">Generation</div>
                 </div>
                 <div className="h-12 w-px bg-gradient-to-b from-transparent via-primary/20 to-transparent"></div>
@@ -58,8 +58,7 @@ const HomePage = () => {
                 <Button
                   size="lg"
                   asChild
-                  className="relative group overflow-hidden bg-primary hover:bg-primary/90 text-primary-foreground px-6 md:px-8 py-4 md:py-6 text-lg font-medium rounded-xl"
-                >
+                  className="relative group overflow-hidden bg-primary hover:bg-primary/90 text-primary-foreground px-6 md:px-8 py-4 md:py-6 text-lg font-medium rounded-xl animate-button-hover">
                   <Link href={"/generate-roadmap"} className="flex items-center font-mono">
                     Build Your Roadmap
                     <ArrowRightIcon className="ml-2 size-5 group-hover:translate-x-1 transition-transform" />
@@ -85,7 +84,7 @@ const HomePage = () => {
                   <img
                     src="/ai_hero1.png"
                     alt="AI Learning Assistant"
-                    className="w-full h-full object-cover object-center"
+                    className="w-full h-full object-cover object-center animate-image-fade"
                   />
 
                   {/* Enhanced Decorations */}
