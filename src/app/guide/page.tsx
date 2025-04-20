@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Construction, Hammer, Wrench } from "lucide-react";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Construction} from "lucide-react";
 
 export default function Guide() {
   return (
