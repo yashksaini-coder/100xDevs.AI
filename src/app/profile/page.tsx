@@ -12,7 +12,6 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
   BookOpen,
-  CalendarIcon,
   Clock,
   Code2,
   GraduationCap,
@@ -20,12 +19,8 @@ import {
   Rocket,
   Timer,
   AlertCircle,
-  Clock4,
   CheckCircle2,
-  Bookmark,
   Trophy,
-  Lightbulb,
-  BrainCircuit,
   ChevronRight,
   ChevronDown
 } from "lucide-react";

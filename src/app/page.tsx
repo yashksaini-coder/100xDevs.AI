@@ -1,9 +1,11 @@
 // import TerminalOverlay from "@/components/TerminalOverlay";
 import { Button } from "@/components/ui/button";
 import UserRoadmaps from "@/components/UserRoadmaps";
-import { ArrowRightIcon, Sparkles } from "lucide-react";
+import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
 import { ContainerTextFlipDemo } from "@/components/Acerternity/TextFlip";
+import Image from "next/image";
+
 const HomePage = () => {
   return (
     <div className="flex flex-col min-h-screen text-foreground overflow-hidden">
@@ -81,10 +83,12 @@ const HomePage = () => {
               {/* IMAGE CONTAINER */}
               <div className="relative aspect-square max-w-md md:max-w-lg mx-auto">
                 <div className="relative overflow-hidden rounded-2xl bg-background/5 backdrop-blur-sm border border-primary/10">
-                  <img
+                  <Image
                     src="/ai_hero1.png"
                     alt="AI Learning Assistant"
                     className="w-full h-full object-cover object-center animate-image-fade"
+                    width={512}
+                    height={512}
                   />
 
                   {/* Enhanced Decorations */}

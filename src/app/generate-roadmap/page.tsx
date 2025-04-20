@@ -6,6 +6,7 @@ import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { PulsatingButton } from "@/components/magicui/pulsating-button";
+import Image from "next/image";
 
 const GenerateProgramPage = () => {
   const [callActive, setCallActive] = useState(false);
@@ -178,10 +179,12 @@ const GenerateProgramPage = () => {
                 <div className={`absolute inset-0 bg-primary opacity-10 rounded-full blur-lg ${isSpeaking ? "animate-pulse" : ""}`} />
                 <div className="relative w-full h-full rounded-full bg-card flex items-center justify-center border border-border overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-b from-primary/10 to-secondary/10">
-                    <img
+                    <Image
                       src="/ai_hero2.png"
                       alt="AI Assistant"
                       className="w-full h-full object-cover animate-image-fade"
+                      width={128}
+                      height={128}
                     />
                   </div>
                 </div>
@@ -199,10 +202,13 @@ const GenerateProgramPage = () => {
           <Card className={`bg-card/90 backdrop-blur-sm border overflow-hidden relative animate-card-hover`}>
             <div className="aspect-video flex flex-col items-center justify-center p-4 md:p-6 relative">
               <div className="relative size-24 md:size-32 mb-4">
-                <img
+                <Image
+                  //@ts-expect-error - user.imageUrl is not typed
                   src={user?.imageUrl}
                   alt="User"
                   className="size-full object-cover rounded-full animate-image-fade"
+                  width={128}
+                  height={128}
                 />
               </div>
               <h2 className="text-lg md:text-xl font-bold text-foreground animate-text-fade">You</h2>
