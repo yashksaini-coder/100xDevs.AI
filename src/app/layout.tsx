@@ -27,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <ConvexClerkProvider>
-      <html lang="en">
+      <html lang="en" suppressContentEditableWarning>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
