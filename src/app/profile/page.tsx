@@ -17,28 +17,28 @@ import {
   Code2,
   GraduationCap,
   Target,
-  Users2,
-  Sparkles,
+  Rocket,
+  Timer,
+  AlertCircle,
+  Clock4,
+  CheckCircle2,
   Bookmark,
   Trophy,
   Lightbulb,
   BrainCircuit,
-  Rocket,
-  Timer,
-  CheckCircle2,
-  AlertCircle,
-  Clock4
+  ChevronRight,
+  ChevronDown
 } from "lucide-react";
 import { NoRoadmap } from "@/components/NoRoadmap";
-import { Id } from "../../../convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
 
 export default function ProfilePage() {
   const { user } = useUser();
-  const userId = user?.id;
+  const userId = user?.id as string;
 
-  const allRoadmaps = useQuery(api.roadmaps.getUserRoadmaps, { userId: userId as Id<"users"> });
+  const allRoadmaps = useQuery(api.roadmaps.getUserRoadmaps, { userId });
   const [selectedRoadmapId, setSelectedRoadmapId] = useState<null | string>(null);
+  const [expandedMilestones, setExpandedMilestones] = useState<Set<string>>(new Set());
 
   const activeRoadmap = allRoadmaps?.find((roadmap) => roadmap.isActive);
   const currentRoadmap = selectedRoadmapId
@@ -67,6 +67,18 @@ export default function ProfilePage() {
       default:
         return 'bg-gray-500/20 text-gray-500';
     }
+  };
+
+  const toggleMilestone = (milestoneId: string) => {
+    setExpandedMilestones(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(milestoneId)) {
+        newSet.delete(milestoneId);
+      } else {
+        newSet.add(milestoneId);
+      }
+      return newSet;
+    });
   };
 
   return (
@@ -195,41 +207,6 @@ export default function ProfilePage() {
                       </Card>
                     </div>
 
-                    {/* Deadline */}
-                    <Card>
-                      <CardHeader className="flex flex-row items-center gap-2 pb-2">
-                        <CalendarIcon className="h-4 w-4 text-primary" />
-                        <CardTitle className="text-base">Target Deadline</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="flex items-center gap-2">
-                          <Clock4 className="h-4 w-4 text-muted-foreground" />
-                          <span className="text-sm text-muted-foreground">
-                            {currentRoadmap.roadmapPlan.deadline || 'Flexible Timeline'}
-                          </span>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </TabsContent>
-
-                  <TabsContent value="details" className="space-y-6">
-                    {/* Areas of Interest */}
-                    <Card>
-                      <CardHeader className="flex flex-row items-center gap-2 pb-2">
-                        <Code2 className="h-4 w-4 text-primary" />
-                        <CardTitle className="text-base">Areas of Interest</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="flex flex-wrap gap-2">
-                          {currentRoadmap.roadmapPlan.interest.map((interest, index) => (
-                            <Badge key={index} variant="secondary" className="bg-primary/10 text-primary">
-                              {interest}
-                            </Badge>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-
                     {/* Learning Preferences */}
                     <Card>
                       <CardHeader className="flex flex-row items-center gap-2 pb-2">
@@ -257,23 +234,145 @@ export default function ProfilePage() {
                         )}
                       </CardContent>
                     </Card>
+                  </TabsContent>
 
-                    {/* Constraints */}
+                  <TabsContent value="details" className="space-y-6">
+                    {/* Areas of Interest */}
                     <Card>
                       <CardHeader className="flex flex-row items-center gap-2 pb-2">
-                        <AlertCircle className="h-4 w-4 text-primary" />
-                        <CardTitle className="text-base">Learning Constraints</CardTitle>
+                        <Code2 className="h-4 w-4 text-primary" />
+                        <CardTitle className="text-base">Areas of Interest</CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div className="flex flex-wrap gap-2">
-                          {currentRoadmap.roadmapPlan.constraints?.map((constraint, index) => (
-                            <Badge key={index} variant="outline" className="bg-background text-muted-foreground">
-                              {constraint}
+                          {currentRoadmap.roadmapPlan.interest.map((interest, index) => (
+                            <Badge key={index} variant="secondary" className="bg-primary/10 text-primary">
+                              {interest}
                             </Badge>
                           ))}
                         </div>
                       </CardContent>
                     </Card>
+
+                    {/* Learning Constraints */}
+                    {currentRoadmap.roadmapPlan.constraints && currentRoadmap.roadmapPlan.constraints.length > 0 && (
+                      <Card>
+                        <CardHeader className="flex flex-row items-center gap-2 pb-2">
+                          <AlertCircle className="h-4 w-4 text-primary" />
+                          <CardTitle className="text-base">Learning Constraints</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="flex flex-wrap gap-2">
+                            {currentRoadmap.roadmapPlan.constraints.map((constraint, index) => (
+                              <Badge key={index} variant="outline" className="bg-background text-muted-foreground">
+                                {constraint}
+                              </Badge>
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
+
+                    {/* Milestones */}
+                    {currentRoadmap.roadmapPlan.milestones && currentRoadmap.roadmapPlan.milestones.length > 0 && (
+                      <Card>
+                        <CardHeader className="flex flex-row items-center gap-2 pb-2">
+                          <Trophy className="h-4 w-4 text-primary" />
+                          <CardTitle className="text-base">Learning Milestones</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          {currentRoadmap.roadmapPlan.milestones.map((milestone: any, index: number) => {
+                            const isExpanded = expandedMilestones.has(milestone.title);
+                            return (
+                              <div key={index} className="border-l-2 border-primary pl-4">
+                                <button
+                                  onClick={() => toggleMilestone(milestone.title)}
+                                  className="w-full flex items-center gap-2 hover:bg-muted/50 p-2 rounded-md transition-colors"
+                                >
+                                  <div className="flex-1 flex items-center gap-2">
+                                    <CheckCircle2 className={cn(
+                                      "h-4 w-4",
+                                      milestone.status === 'completed' ? 'text-green-500' : 
+                                      milestone.status === 'in_progress' ? 'text-blue-500' : 'text-muted-foreground'
+                                    )} />
+                                    <h4 className="font-medium">{milestone.title}</h4>
+                                    <Badge variant="outline" className="ml-auto">
+                                      {milestone.duration}
+                                    </Badge>
+                                  </div>
+                                  {isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                                </button>
+                                {isExpanded && (
+                                  <div className="mt-2 pl-6 space-y-4">
+                                    <p className="text-sm text-muted-foreground">
+                                      {milestone.description}
+                                    </p>
+                                    {milestone.resources && milestone.resources.length > 0 && (
+                                      <div>
+                                        <h5 className="text-xs font-medium mb-1">Resources:</h5>
+                                        <div className="flex flex-wrap gap-1">
+                                          {milestone.resources.map((resource: string, i: number) => (
+                                            <Badge key={i} variant="secondary" className="text-xs">
+                                              {resource}
+                                            </Badge>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    )}
+                                    {milestone.checkpoints && milestone.checkpoints.length > 0 && (
+                                      <div>
+                                        <h5 className="text-xs font-medium mb-1">Checkpoints:</h5>
+                                        <ul className="space-y-1">
+                                          {milestone.checkpoints.map((checkpoint: string, i: number) => (
+                                            <li key={i} className="flex items-start gap-2">
+                                              <CheckCircle2 className="h-3 w-3 text-primary mt-1" />
+                                              <span className="text-xs">{checkpoint}</span>
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      </div>
+                                    )}
+                                    {milestone.projects && milestone.projects.length > 0 && (
+                                      <div>
+                                        <h5 className="text-xs font-medium mb-1">Projects:</h5>
+                                        <ul className="space-y-1">
+                                          {milestone.projects.map((project: string, i: number) => (
+                                            <li key={i} className="flex items-start gap-2">
+                                              <Code2 className="h-3 w-3 text-primary mt-1" />
+                                              <span className="text-xs">{project}</span>
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </CardContent>
+                      </Card>
+                    )}
+
+                    {/* Success Metrics */}
+                    {currentRoadmap.roadmapPlan.successMetrics && currentRoadmap.roadmapPlan.successMetrics.length > 0 && (
+                      <Card>
+                        <CardHeader className="flex flex-row items-center gap-2 pb-2">
+                          <Target className="h-4 w-4 text-primary" />
+                          <CardTitle className="text-base">Success Metrics</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <ul className="space-y-2">
+                            {currentRoadmap.roadmapPlan.successMetrics.map((metric: string, index: number) => (
+                              <li key={index} className="flex items-start gap-2">
+                                <CheckCircle2 className="h-4 w-4 text-primary mt-1" />
+                                <span className="text-sm">{metric}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </CardContent>
+                      </Card>
+                    )}
                   </TabsContent>
                 </Tabs>
               </CardContent>

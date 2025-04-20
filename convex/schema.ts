@@ -40,6 +40,25 @@ export default defineSchema({
                 v.literal("in_progress"),
                 v.literal("completed")
             ),
+            milestones: v.optional(
+                v.array(
+                    v.object({
+                        title: v.string(),
+                        description: v.string(),
+                        duration: v.string(),
+                        resources: v.array(v.string()),
+                        checkpoints: v.array(v.string()),
+                        projects: v.array(v.string()),
+                        status: v.union(
+                            v.literal("pending"),
+                            v.literal("in_progress"),
+                            v.literal("completed")
+                        ),
+                    })
+                )
+            ),
+            estimatedCompletion: v.optional(v.string()),
+            successMetrics: v.optional(v.array(v.string())),
         }),
         isActive: v.boolean(),
     }).index("by_user_id", ["userId"]).index("by_active", ["isActive"]),
