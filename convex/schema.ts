@@ -8,10 +8,10 @@ export default defineSchema({
         email: v.string(),
         image: v.optional(v.string()),
         clerkId: v.string(),
-    }).index("byClerkId", ["clerkId"]),
+    }).index("by_clerk_id", ["clerkId"]),
 
     roadmaps: defineTable({
-        userId: v.id("users"),
+        userId: v.string(),
         name: v.string(),
         roadmapPlan: v.object({
             goal: v.string(),              // Why they're learning to code
@@ -42,7 +42,7 @@ export default defineSchema({
             ),
         }),
         isActive: v.boolean(),
-    }).index("byUserId", ["userId"]).index("byActive", ["isActive"]),
+    }).index("by_user_id", ["userId"]).index("by_active", ["isActive"]),
 });
 
 

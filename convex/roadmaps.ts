@@ -3,7 +3,7 @@ import { v } from "convex/values";
     
 export const createRoadmap = mutation({
   args: {
-    userId: v.id("users"),
+    userId: v.string(),
     name: v.string(),
     roadmapPlan: v.object({
       goal: v.string(),
@@ -38,7 +38,7 @@ export const createRoadmap = mutation({
   handler: async (ctx, args) => {
     const activePlans = await ctx.db
       .query("roadmaps")
-      .withIndex("byUserId", (q) => q.eq("userId", args.userId))
+      .withIndex("by_user_id", (q) => q.eq("userId", args.userId))
       .filter((q) => q.eq(q.field("isActive"), true))
       .collect();
 
@@ -53,11 +53,11 @@ export const createRoadmap = mutation({
 });
 
 export const getUserRoadmaps = query({
-  args: { userId: v.id("users") },
+  args: { userId: v.string() },
   handler: async (ctx, args) => {
     const roadmaps = await ctx.db
       .query("roadmaps")
-      .withIndex("byUserId", (q) => q.eq("userId", args.userId))
+      .withIndex("by_user_id", (q) => q.eq("userId", args.userId))
       .order("desc")
       .collect();
 

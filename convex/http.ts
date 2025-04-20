@@ -94,19 +94,45 @@ http.route({
 
 // validate and fix workout plan to ensure it has proper numeric types
 function validateRoadmapPlan(roadmap: any) {
-  const validatedRoadmap = {
-    goal: typeof roadmap.goal === "string" ? roadmap.goal : "",
-    skill: ["beginner", "intermediate", "advanced"].includes(roadmap.skill) ? roadmap.skill : "beginner",
-    schedule: ["<2h", "2-5h", "5-10h", "10+h"].includes(roadmap.schedule) ? roadmap.schedule : "<2h",
-    interest: Array.isArray(roadmap.interest) ? roadmap.interest.filter((i: any) => typeof i === "string") : [],
-    deadline: typeof roadmap.deadline === "string" ? roadmap.deadline : undefined,
-    constraints: Array.isArray(roadmap.constraints) ? roadmap.constraints.filter((c: any) => typeof c === "string") : undefined,
-    preferences: roadmap.preferences ? {
-      style: Array.isArray(roadmap.preferences.style) ? roadmap.preferences.style.filter((s: any) => typeof s === "string") : [],
-      language: typeof roadmap.preferences.language === "string" ? roadmap.preferences.language : undefined,
-    } : undefined,
-    status: ["new", "in_progress", "completed"].includes(roadmap.status) ? roadmap.status : "new",
+  // Helper function to safely convert to array and clean values
+  const safeArray = (value: any): string[] => {
+    if (!value) return [];
+    if (Array.isArray(value)) {
+      return value
+        .filter(item => typeof item === "string" && item.trim() !== "")
+        .map(item => item.trim());
+    }
+    if (typeof value === "string") {
+      return value
+        .split(",")
+        .map(item => item.trim())
+        .filter(item => item !== "");
+    }
+    return [];
   };
+
+  const validatedRoadmap = {
+    goal: typeof roadmap.Goal === "string" ? roadmap.Goal.trim() : "",
+    skill: ["beginner", "intermediate", "advanced"].includes(roadmap.Skill?.toLowerCase()) 
+      ? roadmap.Skill.toLowerCase() 
+      : "beginner",
+    schedule: ["<2h", "2-5h", "5-10h", "10+h"].includes(roadmap.Time) 
+      ? roadmap.Time 
+      : "<2h",
+    interest: safeArray(roadmap.Interests),
+    deadline: typeof roadmap.Deadline === "string" && roadmap.Deadline.trim() !== "" 
+      ? roadmap.Deadline.trim() 
+      : undefined,
+    constraints: safeArray(roadmap.Constraints),
+    preferences: {
+      style: safeArray(roadmap.Preferences),
+      language: undefined
+    },
+    status: ["new", "in_progress", "completed"].includes(roadmap.Status?.toLowerCase()) 
+      ? roadmap.Status.toLowerCase() 
+      : "new"
+  };
+
   return validatedRoadmap;
 }
 
@@ -116,37 +142,28 @@ http.route({
   handler: httpAction(async (ctx, request) => {
     try {
       const payload = await request.json();
-
-      const {
-        user_id,
-        goal,
-        skill,
-        schedule,
-        interest,
-        deadline,
-        constraints,
-        preferences,
-      } = payload;
-
       console.log("Payload is here:", payload);
 
+      // Validate and transform the input data
+      const validatedData = validateRoadmapPlan(payload);
+
       const model = genAI.getGenerativeModel({
-        model: "gemini-2.0-flash-001", // use the latest model
+        model: "gemini-2.0-flash-001",
         generationConfig: {
-          temperature: 0.4, // lower temperature for more predictable outputs
-          topP: 0.9, // use topP for more diverse outputs
+          temperature: 0.4,
+          topP: 0.9,
           responseMimeType: "application/json",
         },
       });
 
       const roadmapPrompt = `You are a 100xDevs AI Assistant. You are tasked with creating a personalized roadmap based on:
-      Goal: ${goal}
-      Skill level: ${skill}
-      Available schedule: ${schedule}
-      Interests: ${interest.join(", ")}
-      Deadline: ${deadline || "No deadline specified"}
-      Constraints: ${constraints ? constraints.join(", ") : "None"}
-      Preferences: ${preferences ? JSON.stringify(preferences) : "None"}
+      Goal: ${validatedData.goal}
+      Skill level: ${validatedData.skill}
+      Available schedule: ${validatedData.schedule}
+      Interests: ${validatedData.interest.join(", ")}
+      Deadline: ${validatedData.deadline || "No deadline specified"}
+      Constraints: ${validatedData.constraints.length > 0 ? validatedData.constraints.join(", ") : "None"}
+      Preferences: ${validatedData.preferences.style.length > 0 ? validatedData.preferences.style.join(", ") : "None"}
       
       As a professional planner:
       - Design a roadmap that aligns with the user's goal and skill level
@@ -167,17 +184,17 @@ http.route({
       
       Return a JSON object with this EXACT structure:
       {
-        "goal": "${goal}",
-        "skill": "${skill}",
-        "schedule": "${schedule}",
-        "interest": ["Interest1", "Interest2"],
-        "deadline": "${deadline}",
-        "constraints": ["Constraint1", "Constraint2"],
+        "goal": "${validatedData.goal}",
+        "skill": "${validatedData.skill}",
+        "schedule": "${validatedData.schedule}",
+        "interest": ${JSON.stringify(validatedData.interest)},
+        "deadline": "${validatedData.deadline || ""}",
+        "constraints": ${JSON.stringify(validatedData.constraints)},
         "preferences": {
-          "style": ["Style1", "Style2"],
-          "language": "Language"
+          "style": ${JSON.stringify(validatedData.preferences.style)},
+          "language": "${validatedData.preferences.language || ""}"
         },
-        "status": "new"
+        "status": "${validatedData.status}"
       }
       
       DO NOT add any fields that are not in this example. Your response must be a valid JSON object with no additional text.`;
@@ -191,10 +208,10 @@ http.route({
 
       // save to our DB: CONVEX
       const roadmapId = await ctx.runMutation(api.roadmaps.createRoadmap, {
-        userId: user_id,
+        userId: payload.user_id,
         roadmapPlan: roadmap,
         isActive: true,
-        name: `${goal} Roadmap - ${new Date().toLocaleDateString()}`,
+        name: `${validatedData.goal} Roadmap - ${new Date().toLocaleDateString()}`,
       });
 
       return new Response(
