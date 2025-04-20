@@ -9,10 +9,10 @@ export const NoRoadmap = () => {
       <Corners />
 
       <h2 className="text-2xl font-bold mb-4 font-mono">
-        <span className="text-primary">No</span> fitness plans yet
+        <span className="text-primary">No</span> Roadmaps yet
       </h2>
       <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-        Start by creating a personalized fitness and diet plan tailored to your specific goals and
+        Start by creating a personalized roadmap tailored to your specific goals and
         needs
       </p>
       <Button
@@ -20,9 +20,9 @@ export const NoRoadmap = () => {
         asChild
         className="relative overflow-hidden bg-primary text-primary-foreground px-8 py-6 text-lg font-medium"
       >
-        <Link href="/generate-program">
+        <Link href="/generate-roadmap">
           <span className="relative flex items-center">
-            Create Your First Plan
+            Create Your First Roadmap
             <ArrowRightIcon className="ml-2 h-5 w-5" />
           </span>
         </Link>
