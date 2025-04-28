@@ -159,6 +159,21 @@ export default function ProfilePage() {
                       <Progress value={currentRoadmap.roadmapPlan.status === 'completed' ? 100 : currentRoadmap.roadmapPlan.status === 'in_progress' ? 50 : 0} />
                     </div>
 
+                    {/* Estimated Completion */}
+                    {currentRoadmap.roadmapPlan.estimatedCompletion && (
+                      <Card>
+                        <CardHeader className="flex flex-row items-center gap-2 pb-2">
+                          <Clock className="h-4 w-4 text-primary" />
+                          <CardTitle className="text-base">Estimated Completion</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <span className="text-sm text-muted-foreground">
+                            {currentRoadmap.roadmapPlan.estimatedCompletion}
+                          </span>
+                        </CardContent>
+                      </Card>
+                    )}
+
                     {/* Goal Section */}
                     <Card>
                       <CardHeader className="flex flex-row items-center gap-2 pb-2">
@@ -180,11 +195,17 @@ export default function ProfilePage() {
                           <CardTitle className="text-base">Time Commitment</CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 flex-wrap">
                             <Timer className="h-4 w-4 text-muted-foreground" />
-                            <span className="text-sm text-muted-foreground">
-                              {currentRoadmap.roadmapPlan.schedule} per week
-                            </span>
+                            {Array.isArray(currentRoadmap.roadmapPlan.schedule) && currentRoadmap.roadmapPlan.schedule.length > 0 ? (
+                              currentRoadmap.roadmapPlan.schedule.map((entry: string, idx: number) => (
+                                <span key={idx} className="text-sm text-muted-foreground mr-2">
+                                  {entry} per week
+                                </span>
+                              ))
+                            ) : (
+                              <span className="text-sm text-muted-foreground">No schedule specified</span>
+                            )}
                           </div>
                         </CardContent>
                       </Card>
@@ -212,20 +233,26 @@ export default function ProfilePage() {
                         <div>
                           <h4 className="text-sm font-medium mb-2">Preferred Styles</h4>
                           <div className="flex flex-wrap gap-2">
-                            {currentRoadmap.roadmapPlan.preferences?.style.map((style, index) => (
-                              <Badge key={index} variant="outline" className="bg-secondary/10 text-secondary">
-                                {style}
-                              </Badge>
-                            ))}
+                            {Array.isArray(currentRoadmap.roadmapPlan.preferences?.style) && currentRoadmap.roadmapPlan.preferences?.style.length > 0 ? (
+                              currentRoadmap.roadmapPlan.preferences.style.map((style, index) => (
+                                <Badge key={index} variant="outline" className="bg-secondary/10 text-secondary">
+                                  {style}
+                                </Badge>
+                              ))
+                            ) : (
+                              <span className="text-xs text-muted-foreground">No style preferences specified</span>
+                            )}
                           </div>
                         </div>
-                        {currentRoadmap.roadmapPlan.preferences?.language && (
+                        {currentRoadmap.roadmapPlan.preferences?.language ? (
                           <div>
                             <h4 className="text-sm font-medium mb-2">Primary Language</h4>
                             <Badge variant="secondary" className="bg-primary/10 text-primary">
                               {currentRoadmap.roadmapPlan.preferences.language}
                             </Badge>
                           </div>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">No language preference specified</span>
                         )}
                       </CardContent>
                     </Card>
@@ -269,7 +296,7 @@ export default function ProfilePage() {
                     )}
 
                     {/* Milestones */}
-                    {currentRoadmap.roadmapPlan.milestones && currentRoadmap.roadmapPlan.milestones.length > 0 && (
+                    {currentRoadmap.roadmapPlan.milestones && currentRoadmap.roadmapPlan.milestones.length > 0 ? (
                       <Card>
                         <CardHeader className="flex flex-row items-center gap-2 pb-2">
                           <Trophy className="h-4 w-4 text-primary" />
@@ -294,15 +321,18 @@ export default function ProfilePage() {
                                     <Badge variant="outline" className="ml-auto">
                                       {milestone.duration}
                                     </Badge>
+                                    <Badge variant="secondary" className={getStatusColor(milestone.status) + " ml-2"}>
+                                      {milestone.status.toUpperCase().replace('_', ' ')}
+                                    </Badge>
                                   </div>
                                   {isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
                                 </button>
                                 {isExpanded && (
                                   <div className="mt-2 pl-6 space-y-4">
                                     <p className="text-sm text-muted-foreground">
-                                      {milestone.description}
+                                      {milestone.description || <span className="text-xs text-muted-foreground">No description</span>}
                                     </p>
-                                    {milestone.resources && milestone.resources.length > 0 && (
+                                    {milestone.resources && milestone.resources.length > 0 ? (
                                       <div>
                                         <h5 className="text-xs font-medium mb-1">Resources:</h5>
                                         <div className="flex flex-wrap gap-1">
@@ -313,8 +343,10 @@ export default function ProfilePage() {
                                           ))}
                                         </div>
                                       </div>
+                                    ) : (
+                                      <span className="text-xs text-muted-foreground">No resources</span>
                                     )}
-                                    {milestone.checkpoints && milestone.checkpoints.length > 0 && (
+                                    {milestone.checkpoints && milestone.checkpoints.length > 0 ? (
                                       <div>
                                         <h5 className="text-xs font-medium mb-1">Checkpoints:</h5>
                                         <ul className="space-y-1">
@@ -326,8 +358,10 @@ export default function ProfilePage() {
                                           ))}
                                         </ul>
                                       </div>
+                                    ) : (
+                                      <span className="text-xs text-muted-foreground">No checkpoints</span>
                                     )}
-                                    {milestone.projects && milestone.projects.length > 0 && (
+                                    {milestone.projects && milestone.projects.length > 0 ? (
                                       <div>
                                         <h5 className="text-xs font-medium mb-1">Projects:</h5>
                                         <ul className="space-y-1">
@@ -339,6 +373,8 @@ export default function ProfilePage() {
                                           ))}
                                         </ul>
                                       </div>
+                                    ) : (
+                                      <span className="text-xs text-muted-foreground">No projects</span>
                                     )}
                                   </div>
                                 )}
@@ -347,6 +383,8 @@ export default function ProfilePage() {
                           })}
                         </CardContent>
                       </Card>
+                    ) : (
+                      <span className="text-xs text-muted-foreground">No milestones specified</span>
                     )}
 
                     {/* Success Metrics */}

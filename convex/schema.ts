@@ -20,12 +20,7 @@ export default defineSchema({
                 v.literal("intermediate"),
                 v.literal("advanced")
             ),
-            schedule: v.union(
-                v.literal("<2h"),
-                v.literal("2-5h"),
-                v.literal("5-10h"),
-                v.literal("10+h")
-            ),
+            schedule: v.array(v.string()),
             interest: v.array(v.string()), // Areas like web, mobile, AI, etc.
             deadline: v.optional(v.string()), // e.g. "3 months", ISO date, etc.
             constraints: v.optional(v.array(v.string())), // Free/Paid, Accessibility, etc.

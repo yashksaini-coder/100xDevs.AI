@@ -91,78 +91,52 @@ http.route({
   }),
 });
 
-
-// validate and fix workout plan to ensure it has proper numeric types
+// Simplified validation: accept AI output, ensure arrays, minimal coercion
 function validateRoadmapPlan(roadmap: any) {
-  // Helper function to safely convert to array and clean values
-  const safeArray = (value: any): string[] => {
-    if (!value) return [];
-    if (Array.isArray(value)) {
-      return value
-        .filter(item => typeof item === "string" && item.trim() !== "")
-        .map(item => item.trim());
-    }
-    if (typeof value === "string") {
-      return value
-        .split(",")
-        .map(item => item.trim())
-        .filter(item => item !== "");
-    }
+  // Helper to ensure value is array of strings
+  const ensureStringArray = (val: any): string[] => {
+    if (!val) return [];
+    if (Array.isArray(val)) return val.map(String);
+    if (typeof val === "string") return [val];
     return [];
   };
 
-  // Helper function to validate and normalize skill level
-  const validateSkill = (skill: string): "beginner" | "intermediate" | "advanced" => {
-    const normalizedSkill = (skill || "").toLowerCase();
-    if (["beginner", "intermediate", "advanced"].includes(normalizedSkill)) {
-      return normalizedSkill as "beginner" | "intermediate" | "advanced";
-    }
-    return "beginner";
-  };
+  // Preferences
+  let preferences = undefined;
+  if (roadmap.preferences) {
+    preferences = {
+      style: ensureStringArray(roadmap.preferences.style),
+      language: typeof roadmap.preferences.language === "string" ? roadmap.preferences.language : undefined,
+    };
+  }
 
-  // Helper function to validate and normalize schedule
-  const validateSchedule = (schedule: string): "<2h" | "2-5h" | "5-10h" | "10+h" => {
-    const normalizedSchedule = (schedule || "").toLowerCase();
-    if (["<2h", "2-5h", "5-10h", "10+h"].includes(normalizedSchedule)) {
-      return normalizedSchedule as "<2h" | "2-5h" | "5-10h" | "10+h";
-    }
-    return "<2h";
-  };
+  // Milestones
+  let milestones = undefined;
+  if (Array.isArray(roadmap.milestones)) {
+    milestones = roadmap.milestones.map((m: any) => ({
+      title: m.title ?? "",
+      description: m.description ?? "",
+      duration: m.duration ?? "",
+      resources: ensureStringArray(m.resources),
+      checkpoints: ensureStringArray(m.checkpoints),
+      projects: ensureStringArray(m.projects),
+      status: m.status ?? "pending",
+    }));
+  }
 
-  // Helper function to validate and normalize status
-  const validateStatus = (status: string): "new" | "in_progress" | "completed" => {
-    const normalizedStatus = (status || "").toLowerCase();
-    if (["new", "in_progress", "completed"].includes(normalizedStatus)) {
-      return normalizedStatus as "new" | "in_progress" | "completed";
-    }
-    return "new";
+  return {
+    goal: roadmap.goal ?? "",
+    skill: roadmap.skill ?? "beginner",
+    schedule: ensureStringArray(roadmap.schedule),
+    interest: ensureStringArray(roadmap.interest),
+    deadline: roadmap.deadline ?? undefined,
+    constraints: ensureStringArray(roadmap.constraints),
+    preferences,
+    status: roadmap.status ?? "new",
+    milestones,
+    estimatedCompletion: roadmap.estimatedCompletion ?? undefined,
+    successMetrics: ensureStringArray(roadmap.successMetrics),
   };
-
-  const validatedRoadmap = {
-    goal: typeof roadmap.Goal === "string" && roadmap.Goal.trim() !== "" 
-      ? roadmap.Goal.trim() 
-      : "Learn and master new skills",
-    skill: validateSkill(roadmap.Skill),
-    schedule: validateSchedule(roadmap.Time),
-    interest: safeArray(roadmap.Interests).length > 0 
-      ? safeArray(roadmap.Interests) 
-      : ["General Learning"],
-    deadline: typeof roadmap.Deadline === "string" && roadmap.Deadline.trim() !== "" 
-      ? roadmap.Deadline.trim() 
-      : undefined,
-    constraints: safeArray(roadmap.Constraints),
-    preferences: {
-      style: safeArray(roadmap.Preferences).length > 0 
-        ? safeArray(roadmap.Preferences) 
-        : ["Self-paced", "Hands-on"],
-      language: typeof roadmap.Language === "string" && roadmap.Language.trim() !== "" 
-        ? roadmap.Language.trim() 
-        : "English"
-    },
-    status: validateStatus(roadmap.Status)
-  };
-
-  return validatedRoadmap;
 }
 
 http.route({
@@ -185,63 +159,7 @@ http.route({
         },
       });
 
-      const roadmapPrompt = `You are a 100xDevs AI Assistant, an expert in creating personalized learning roadmaps. Create a detailed roadmap based on:
-
-LEARNER PROFILE:
-- Goal: ${validatedData.goal}
-- Current Skill Level: ${validatedData.skill}
-- Available Time: ${validatedData.schedule} per week
-- Areas of Interest: ${validatedData.interest.join(", ")}
-- Target Deadline: ${validatedData.deadline || "Flexible"}
-- Learning Constraints: ${validatedData.constraints.length > 0 ? validatedData.constraints.join(", ") : "None"}
-- Learning Preferences: ${validatedData.preferences.style.join(", ")}
-- Preferred Language: ${validatedData.preferences.language}
-
-ROADMAP REQUIREMENTS:
-1. Create a structured learning path with clear milestones
-2. Include both theoretical and practical components
-3. Provide specific resources and learning materials
-4. Set realistic timeframes for each milestone
-5. Include assessment checkpoints
-6. Suggest projects or exercises for hands-on learning
-7. Consider the learner's constraints and preferences
-8. Include alternative resources for different learning styles
-
-CRITICAL SCHEMA INSTRUCTIONS:
-- Your output MUST follow this EXACT structure
-- All fields must be properly typed and validated
-- Include specific, actionable items
-- Provide concrete resources and references
-- Set clear, measurable milestones
-
-Return a JSON object with this structure:
-{
-  "goal": "${validatedData.goal}",
-  "skill": "${validatedData.skill}",
-  "schedule": "${validatedData.schedule}",
-  "interest": ${JSON.stringify(validatedData.interest)},
-  "deadline": "${validatedData.deadline || ""}",
-  "constraints": ${JSON.stringify(validatedData.constraints)},
-  "preferences": {
-    "style": ${JSON.stringify(validatedData.preferences.style)},
-    "language": "${validatedData.preferences.language}"
-  },
-  "status": "${validatedData.status}",
-  "milestones": [
-    {
-      "title": "string",
-      "description": "string",
-      "duration": "string",
-      "resources": ["string"],
-      "checkpoints": ["string"],
-      "projects": ["string"]
-    }
-  ],
-  "estimatedCompletion": "string",
-  "successMetrics": ["string"]
-}
-
-DO NOT add any fields outside this structure. Your response must be a valid JSON object.`;
+      const roadmapPrompt = `You are a 100xDevs AI Assistant, an expert in creating personalized learning roadmaps. Your task is to generate a JSON object for a learning roadmap that strictly follows the schema below.\n\nLEARNER PROFILE:\n- Goal: ${validatedData.goal}\n- Current Skill Level: ${validatedData.skill}\n- Available Time: ${validatedData.schedule} per week\n- Areas of Interest: ${validatedData.interest.join(", ")}\n- Target Deadline: ${validatedData.deadline || "Flexible"}\n- Learning Constraints: ${validatedData.constraints.length > 0 ? validatedData.constraints.join(", ") : "None"}\n- Learning Preferences: ${validatedData.preferences?.style?.join(", ") || ""}\n- Preferred Language: ${validatedData.preferences?.language || "English"}\n\nREQUIREMENTS:\n1. Create a structured learning path with clear, measurable milestones.\n2. Each milestone must include: title, description, duration, resources (array), checkpoints (array), projects (array), and status (pending, in_progress, or completed).\n3. Include both theoretical and practical components.\n4. Provide specific resources and learning materials.\n5. Set realistic timeframes for each milestone.\n6. Include assessment checkpoints.\n7. Suggest projects or exercises for hands-on learning.\n8. Consider the learner's constraints and preferences.\n9. Include alternative resources for different learning styles.\n10. Set an estimatedCompletion (string, e.g. '3 months', or ISO date).\n11. Provide a successMetrics array (strings) for how the learner will know they've succeeded.\n\nCRITICAL SCHEMA INSTRUCTIONS:\n- Your output MUST follow this EXACT structure.\n- All fields must be present and properly typed.\n- Do NOT add any extra fields.\n- Provide concrete, actionable, and specific items.\n- Use valid JSON.\n\nReturn a JSON object with this structure:\n{\n  "goal": "${validatedData.goal}",\n  "skill": "${validatedData.skill}",\n  "schedule": "${validatedData.schedule}",\n  "interest": ${JSON.stringify(validatedData.interest)},\n  "deadline": "${validatedData.deadline || ""}",\n  "constraints": ${JSON.stringify(validatedData.constraints)},\n  "preferences": {\n    "style": ${JSON.stringify(validatedData.preferences?.style || [])},\n    "language": "${validatedData.preferences?.language || "English"}"\n  },\n  "status": "new",\n  "milestones": [\n    {\n      "title": "string",\n      "description": "string",\n      "duration": "string",\n      "resources": ["string"],\n      "checkpoints": ["string"],\n      "projects": ["string"],\n      "status": "pending"\n    }\n  ],\n  "estimatedCompletion": "string",\n  "successMetrics": ["string"]\n}\n\nDO NOT add any fields outside this structure. Your response must be a valid JSON object.`;
 
       const roadmapResult = await model.generateContent(roadmapPrompt);
       const roadmapText = roadmapResult.response.text();
@@ -286,7 +204,5 @@ DO NOT add any fields outside this structure. Your response must be a valid JSON
     }
   }),
 });
-
-
 
 export default http;
