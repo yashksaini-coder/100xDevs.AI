@@ -12,12 +12,7 @@ export const createRoadmap = mutation({
         v.literal("intermediate"),
         v.literal("advanced")
       ),
-      schedule: v.union(
-        v.literal("<2h"),
-        v.literal("2-5h"),
-        v.literal("5-10h"),
-        v.literal("10+h")
-      ),
+      schedule: v.array(v.string()),
       interest: v.array(v.string()),
       deadline: v.optional(v.string()),
       constraints: v.optional(v.array(v.string())),
@@ -32,6 +27,25 @@ export const createRoadmap = mutation({
         v.literal("in_progress"),
         v.literal("completed")
       ),
+      milestones: v.optional(
+        v.array(
+          v.object({
+            title: v.string(),
+            description: v.string(),
+            duration: v.string(),
+            resources: v.array(v.string()),
+            checkpoints: v.array(v.string()),
+            projects: v.array(v.string()),
+            status: v.union(
+              v.literal("pending"),
+              v.literal("in_progress"),
+              v.literal("completed")
+            ),
+          })
+        )
+      ),
+      estimatedCompletion: v.optional(v.string()),
+      successMetrics: v.optional(v.array(v.string())),
     }),
     isActive: v.boolean(),
   },
