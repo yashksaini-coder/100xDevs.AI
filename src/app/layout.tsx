@@ -16,13 +16,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://ai.yashksaini.systems/"),
   title: "100xDevs AI",
   description: "Modern AI TA for 100xDevs, to help get started in your coding journey.",
   openGraph: {
     title: "100xDevs AI",
     description:
       "Modern AI TA for 100xDevs, to help get started in your coding journey.",
-    url: "https://100xdevs.com",
+    url: "https://ai.yashksaini.systems/",
     siteName: "100xDevs AI",
     images: [
       {
