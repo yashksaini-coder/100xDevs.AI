@@ -5,6 +5,7 @@ import ConvexClerkProvider from "@/providers/ConvexClerkProvider";
 import { Footer } from "../components/Footer";
 import { Navbar } from "@/components/Navbar";
 import Aurora from "@/Backgrounds/Aurora/Aurora";
+import SupportDropdown from "@/components/Support";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -79,6 +80,7 @@ export default function RootLayout({
                 </div>
               </div>
             </main>
+            <SupportDropdown theme="dark" />
             <Footer />
           </div>
         </body>
