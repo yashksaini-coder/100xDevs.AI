@@ -6,7 +6,7 @@ import { Menu, UserIcon, ZapIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
-
+import Guide from "./Guide";
 export const Navbar = () => {
   const { isSignedIn } = useUser();
   const [isOpen, setIsOpen] = React.useState(false);
@@ -69,13 +69,13 @@ export const Navbar = () => {
                   <span>Profile</span>
                 </Link>
               </Button>
-              <Button
+              {/* <Button
                 variant="ghost"
                 size="sm"
                 className="text-muted-foreground hover:text-primary"
               >
-                <Link href="/guide">Guide</Link>
-              </Button>
+              </Button> */}
+                <Guide size={"lg"}/>
               <UserButton />
             </>
           ) : (
