@@ -17,7 +17,37 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "100xDevs AI",
-  description: "Modern AI TA for 100xDevs, to help get started in your coding jounrney.",
+  description: "Modern AI TA for 100xDevs, to help get started in your coding journey.",
+  openGraph: {
+    title: "100xDevs AI",
+    description:
+      "Modern AI TA for 100xDevs, to help get started in your coding journey.",
+    url: "https://100xdevs.com",
+    siteName: "100xDevs AI",
+    images: [
+      {
+        url: "/landing-page.png",
+        width: 1200,
+        height: 630,
+        alt: "100xDevs AI - Modern AI TA for coding journey",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "100xDevs AI",
+    description:
+      "Modern AI TA for 100xDevs, to help get started in your coding journey.",
+    images: ["/landing-page.png"],
+    creator: "@100xDevs",
+  },
+  icons: {
+    icon: "/100xschool.svg",
+    shortcut: "/100xschool.svg",
+    apple: "/100xschool.svg",
+  },
 };
 
 export default function RootLayout({
@@ -27,7 +57,7 @@ export default function RootLayout({
 }>) {
   return (
     <ConvexClerkProvider>
-      <html lang="en" suppressContentEditableWarning>
+      <html lang="en" suppressContentEditableWarning={true}>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
