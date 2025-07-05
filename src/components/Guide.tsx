@@ -27,7 +27,6 @@ import {
   TrendingUp,
   Clock,
   Heart,
-  Star,
   Lightbulb,
   Award,
   X
