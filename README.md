@@ -1,4 +1,4 @@
-# 100xDevs.ai
+# 100xDevs.AI 
 
 A powerful AI-powered Call assistant that assists users in learning and generating personalized learning paths based on their goals, skills, and preferences. Converse with the AI to get help with your learning and get a personalized learning path.
 
@@ -17,10 +17,12 @@ A powerful AI-powered Call assistant that assists users in learning and generati
 ## Tech Stack
 
 <div align="center">
-  <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=nextjs,typescript,tailwind,vercel" />
-  </a>
+    <img src="https://skillicons.dev/icons?i=nextjs,typescript,tailwind,vercel"/>
+    <br/>
+    <br/>
+    <img src="/public/gemini-icon.svg" width="20px" height="20px">
 </div>
+
 
 - **Frontend**: Next.js, TypeScript, Tailwind CSS
 - **Backend**: Convex
