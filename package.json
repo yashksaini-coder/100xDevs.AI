@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.28.1",
-    "@clerk/nextjs": "^6.15.1",
+    "@clerk/nextjs": "^6.39.3",
     "@clerk/types": "^4.63.0",
     "@google/generative-ai": "^0.24.0",
     "@radix-ui/react-accordion": "^1.2.4",
